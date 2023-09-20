@@ -19,7 +19,7 @@ namespace LINQLab
         {
             //// <><><><><><><><> R Actions (Read) <><><><><><><><><>
             //RDemoOne();
-            //RProblemOne();
+            //RProblemOne():
             //RDemoTwo();
             //RProblemTwo();
             //RProblemThree();
@@ -68,6 +68,9 @@ namespace LINQLab
         private void RProblemOne()
         {
             // Print the COUNT of all the users from the User table.
+            var users = _context.Users.Count();
+
+            Console.WriteLine($"Users Count: {users}");
 
         }
 
@@ -90,8 +93,13 @@ namespace LINQLab
         public void RProblemTwo()
         {
             // Write a LINQ query that gets each product whose price is less than or equal to $100.
+            var productsUnder101 = _context.Products.Where(p => p.Price <= 100);
             // Print the name and price of all products
-
+            Console.WriteLine("Products less than or equal to $100");
+            foreach (Product product in productsUnder101)
+            {
+                Console.WriteLine($"Name: {product.Name}\nPrice: {product.Price}");
+            }
         }
 
         /*
@@ -110,6 +118,14 @@ namespace LINQLab
         public void RProblemThree()
         {
             // Write a LINQ query that gets each product whose name that CONTAINS an "s".
+            var containsS = _context.Products.Where(p => p.Name.Contains("s")).ToList();
+
+            foreach (Product product in containsS)
+            {
+                Console.WriteLine($"Name: {product.Name}");
+            }
+
+            
         }
         /*
             Expected Result:
@@ -128,7 +144,12 @@ namespace LINQLab
         public void RProblemFour()
         {
             // Write a LINQ query that gets all the users who registered BEFORE 2016.
+            var registeredBe42016 = _context.Users.Where(u => u.RegistrationDate < new DateTime(2016, 1, 1));
             // Then print each user's email and registration date to the console.
+            foreach (User user in registeredBe42016)
+            {
+                Console.WriteLine($"Email: {user.Email}\nRegistration Date: {user.RegistrationDate}");
+            }
 
         }
         /*
@@ -143,8 +164,12 @@ namespace LINQLab
         public void RProblemFive()
         {
             // Write a LINQ query that gets all of the users who registered AFTER 2016 and BEFORE 2018.
+            var registeredBW16N18 = _context.Users.Where(u => u.RegistrationDate > new DateTime(2016, 1, 1) && u.RegistrationDate < new DateTime(2018, 1, 1));
             // Then print each user's email and registration date to the console.
-
+            foreach (User user in registeredBW16N18)
+            {
+                Console.WriteLine($"Email: {user.Email}\nRegistration Date: {user.RegistrationDate}");
+            }
         }
         /*
             Expected Result:
@@ -168,7 +193,12 @@ namespace LINQLab
         public void RProblemSix()
         {
             // Write a LINQ query that retrieves all of the products in the shopping cart of the user who has the email "afton@gmail.com".
+            var aftonShoppingCart = _context.ShoppingCartItems.Include(sc => sc.Product).Include(sc => sc.User).Where(sc => sc.User.Email.Contains("afton@gmail.com")).ToList();
             // Then print the product's name, price, and quantity to the console.
+           foreach (ShoppingCartItem item in aftonShoppingCart)
+            {
+                Console.WriteLine($"Name: {item.Product.Name}\nPrice: {item.Product.Price}\nQuantity: {item.Quantity}");
+            }
 
 
         }
