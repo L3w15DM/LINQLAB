@@ -30,7 +30,7 @@ namespace LINQLab
             //RDemoThree();
             //RProblemSix();
             //RProblemSeven();
-            //RProblemEight();
+            //RProblemEight();************
 
             //// <><><><><><><><> CUD (Create, Update, Delete) Actions <><><><><><><><><>
 
@@ -38,7 +38,7 @@ namespace LINQLab
             //CDemoOne();
             //CProblemOne();
             //CDemoTwo();
-            //CProblemTwo();
+            CProblemTwo();
 
             //// <><> U Actions (Update) <><>
             //UDemoOne();
@@ -227,8 +227,9 @@ namespace LINQLab
             // HINT: End of query will be: .Select(sc => sc.Product.Price).Sum();
             // Print the total of the shopping cart to the console.
             // Remember to break the problem down and take it one step at a time!
+            var odaShoppingCart = _context.ShoppingCartItems.Include(sc => sc.Product).Include(sc => sc.User).Where(sc => sc.User.Email.Contains("oda@gmail.com")).Select(sc => sc.Product.Price).Sum();
 
-
+            Console.WriteLine($"Total: {odaShoppingCart}");
         }
         /*
          Total: $715.34
@@ -238,7 +239,8 @@ namespace LINQLab
         {
             // Write a query that retrieves all of the products in the shopping cart of users who have the role of "Employee".
             // Then print the product's name, price, and quantity to the console along with the email of the user that has it in their cart.
-
+            //var employeeShopppingCart = _context.ShoppingCartItems.Include(sc => sc.Product).Include(sc => sc.User).Where(sc => sc.User.UserRoles. == );
+                                         
         }
         /*
             Expected Result
@@ -287,15 +289,23 @@ namespace LINQLab
         private void CProblemOne()
         {
             // Create a new Product object and add that product to the Products table. Choose any name and product info you like.
+            Product newProduct = new Product()
+            {
+                Name = "RayBan Wafers",
+                Description = "Sunglasses",
+                Price = 169.99M
 
+            };
 
+            _context.Products.Add(newProduct);
+            _context.SaveChanges();
         }
 
         public void CDemoTwo()
         {
             // This will add the role of "Customer" to the user we created in CDemoOne by adding a new row to the Userroles junction table.
             var roleId = _context.Roles.Where(r => r.RoleName == "Customer").Select(r => r.Id).SingleOrDefault();
-            var userId = _context.Users.Where(u => u.Email == "david@gmail.com").Select(u => u.Id).SingleOrDefault();
+            var userId = _context.Users.Where(u => u.Email == "david@gmail.com").Select(u => u.Id).FirstOrDefault();
             UserRole newUserrole = new UserRole()
             {
                 UserId = userId,
